@@ -27,15 +27,15 @@
   notify:
     - 'restart solr'
 
-- name: 'Get zookeeper communication property'
-  command: >-
-    {{ dest_solr_path }}/server/scripts/cloud-scripts/zkcli.sh
-    -zkhost {{ zk_hosts[0] }}
-    -cmd get /clusterprops.json
-  args:
-    removes: '{{ dest_solr_path }}/server/scripts/cloud-scripts/zkcli.sh'
-  run_once: True
-  register: zk_output
+# - name: 'Get zookeeper communication property'
+#   command: >-
+#     {{ dest_solr_path }}/server/scripts/cloud-scripts/zkcli.sh
+#     -zkhost {{ zk_hosts[0] }}
+#     -cmd get /clusterprops.json
+#   args:
+#     removes: '{{ dest_solr_path }}/server/scripts/cloud-scripts/zkcli.sh'
+#   run_once: True
+#   register: zk_output
 
 - name: 'Set zookeeper communication to {{ zk_enable_ssl | ternary("https", "http") }}'
   command: >-
@@ -47,8 +47,8 @@
   args:
     removes: '{{ dest_solr_path }}/server/scripts/cloud-scripts/zkcli.sh'
   run_once: True
-  when:
-    - (zk_output['stdout_lines'][0] | from_json)['urlScheme'] == '{{ zk_enable_ssl | ternary("https", "http") }}'
+  # when:
+  #   - (zk_output['stdout_lines'][0] | from_json)['urlScheme'] == '{{ zk_enable_ssl | ternary("https", "http") }}'
 
 - name: 'Set configset list'
   find:
