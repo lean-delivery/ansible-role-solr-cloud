@@ -22,7 +22,7 @@ Ansible lint:
   tags:
     - aws
 
-.Docker solr-cloud:
+Docker solr-cloud:
   stage: deployment test
   script:
     - molecule test -s default
@@ -38,7 +38,7 @@ AWS solr-cloud:
   tags:
     - aws
 
-.EPC solr-cloud:
+EPC solr-cloud:
   variables:
     EPC_REGION: EPAM-BY2
   stage: deployment test
