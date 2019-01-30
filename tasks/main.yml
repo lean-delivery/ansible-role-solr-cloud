@@ -7,6 +7,24 @@
     loop_var: host
   run_once: True
 
+- name: 'pip'
+  pip:
+    name: 'pexpect'
+  become: True
+
+- name: 'telnet'
+  ignore_errors: True
+  expect:
+    command: telnet '{{ zk_hosts[0].split(":")[0] }}' '{{ zk_client_port }}'
+    responses:
+      "Escape character is '\\^]'.": "status"
+    echo: True
+  register: telnet_out
+
+- name: 'telnet debug'
+  debug:
+    var: telnet_out["stdout_lines"]
+
 - name: 'Replace zookeeper configuration'
   lineinfile:
     path: '{{ solr_insh_default }}'
