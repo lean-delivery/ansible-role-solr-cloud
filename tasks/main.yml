@@ -7,40 +7,6 @@
     loop_var: host
   run_once: True
 
-- name: 'Get zookeeper props list - debug'
-  command: >-
-    {{ dest_solr_path }}/server/scripts/cloud-scripts/zkcli.sh
-    -zkhost {{ zk_hosts[0] }}
-    -cmd list
-  args:
-    removes: '{{ dest_solr_path }}/server/scripts/cloud-scripts/zkcli.sh'
-  run_once: True
-  register: zk_list_output
-
-- name: 'props debug'
-  debug:
-    var: zk_list_output
-
-- name: 'pip'
-  pip:
-    name: 'pexpect'
-  register: installed_repo
-  until: installed_repo is succeeded
-  become: True
-
-- name: 'telnet'
-  ignore_errors: True
-  expect:
-    command: telnet '{{ zk_hosts[0].split(":")[0] }}' '{{ zk_client_port }}'
-    responses:
-      "Escape character is '\\^]'.": "status"
-    echo: True
-  register: telnet_out
-
-- name: 'telnet debug'
-  debug:
-    msg: '{{ telnet_out["stdout_lines"] }}'
-
 - name: 'Replace zookeeper configuration'
   lineinfile:
     path: '{{ solr_insh_default }}'
@@ -115,6 +81,20 @@
     - zk_hosts | length
     - configset_list | length
   changed_when: False
+
+- name: 'Get zookeeper props list - debug'
+  command: >-
+    {{ dest_solr_path }}/server/scripts/cloud-scripts/zkcli.sh
+    -zkhost {{ zk_hosts[0] }}
+    -cmd list
+  args:
+    removes: '{{ dest_solr_path }}/server/scripts/cloud-scripts/zkcli.sh'
+  run_once: True
+  register: zk_list_output
+
+- name: 'props debug'
+  debug:
+    var: zk_list_output
 
 - name: 'Force all notified handlers to run'
   meta: flush_handlers
