@@ -8,6 +8,7 @@
   hosts: zookeeper
   roles:
     - role: lean_delivery.zookeeper
+      zk_force_myid: False
 
 - name: Install and Configure Solr Servers without ssl and authentication
   hosts: solr
