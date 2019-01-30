@@ -38,7 +38,7 @@
   run_once: True
   register: zk_output
 
-- name: 'Set zookeeper communication to {{ zk_enable_ssl | ternary('https', 'http') }}'
+- name: 'Set zookeeper communication to {{ zk_enable_ssl | ternary("https", "http") }}'
   command: >-
     {{ dest_solr_path }}/server/scripts/cloud-scripts/zkcli.sh
     -zkhost {{ zk_hosts[0] }}
