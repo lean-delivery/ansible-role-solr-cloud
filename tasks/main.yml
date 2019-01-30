@@ -1,9 +1,13 @@
 ---
 - name: 'Debug1'
   debug:
-    msg: '{{ hostvars[item]['ansible_default_ipv4'].address }}'
+    msg: '{{ hostvars[item]["ansible_default_ipv4"].address }}'
   loop: '{{ groups[zk_inventory_group] }}'
 
+- name: 'Debug2'
+  debug:
+    msg: '{{ hostvars[item] }}'
+  loop: '{{ groups[zk_inventory_group] }}'
 
 - name: 'Set zookeeper hosts'
   set_fact:
