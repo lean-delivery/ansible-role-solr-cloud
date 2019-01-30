@@ -1,6 +1,6 @@
 ---
 - name: Prepare Ubuntu / Debian
-  hosts: zookeeper_ubuntu
+  hosts: debian_family
   gather_facts: False
   tasks:
     - name: Workaround for Ubuntu/Debian images
@@ -14,7 +14,7 @@
       changed_when: False
 
 - name: Prepare RHEL
-  hosts: zookeeper_centos
+  hosts: rhel_family
   gather_facts: False
   tasks:
     - name: Install python for Ansible
