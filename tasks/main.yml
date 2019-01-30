@@ -2,15 +2,10 @@
 - name: 'Set zookeeper hosts'
   set_fact:
     zk_hosts: '{{ zk_hosts }} + [ "{{ host }}:{{ zk_client_port }}" ]'
-  loop: >
-    {{ groups[zk_inventory_group] | map("extract", hostvars, ["ansible_host"]) | list }}
+  loop: '{{ groups[zk_inventory_group] | map("extract", hostvars, ["ansible_host"]) | list }}'
   loop_control:
     loop_var: host
   run_once: True
-
-- name: 'zk_hosts'
-  debug:
-    var: zk_hosts
 
 - name: 'Replace zookeeper configuration'
   lineinfile:
@@ -19,7 +14,7 @@
     line: 'ZK_HOST="{{ zk_hosts | join(",") }}"'
   become: True
   when:
-    - zk_hosts | length>0
+    - zk_hosts | length
   notify:
     - 'restart solr'
 
@@ -32,7 +27,18 @@
   notify:
     - 'restart solr'
 
-- name: 'Set zookeeper communication to https'
+- name: 'Get zookeeper communication property'
+  command: >-
+    {{ dest_solr_path }}/server/scripts/cloud-scripts/zkcli.sh
+    -zkhost {{ zk_hosts[0] }}
+    -cmd get
+    /clusterprops.json
+  args:
+    removes: '{{ dest_solr_path }}/server/scripts/cloud-scripts/zkcli.sh'
+  run_once: True
+  register: zk_output
+
+- name: 'Set zookeeper communication to {{ zk_enable_ssl | ternary('https', 'http') }}'
   command: >-
     {{ dest_solr_path }}/server/scripts/cloud-scripts/zkcli.sh
     -zkhost {{ zk_hosts[0] }}
@@ -41,6 +47,9 @@
     -val {{ zk_enable_ssl | ternary('https', 'http') }}
   args:
     removes: '{{ dest_solr_path }}/server/scripts/cloud-scripts/zkcli.sh'
+  run_once: True
+  when:
+    - (zk_output['stdout_lines'][0] | from_json)['urlScheme'] == zk_enable_ssl | ternary('https', 'http')
 
 - name: 'Set configset list'
   find:
@@ -51,7 +60,7 @@
   become: True
   when:
     - auto_populate_configset_list
-    - zk_hosts | length>0
+    - zk_hosts | length
 
 - name: 'Populate configset list'
   set_fact:
@@ -59,11 +68,7 @@
       map('replace', solr_configset_path + '/', '') | list }}"
   when:
     - auto_populate_configset_list
-    - zk_hosts | length>0
-
-- name: 'Debug configset_list'
-  debug:
-    var: configset_list
+    - zk_hosts | length
 
 - name: 'Solr Cloud upload config'
   command: >-
@@ -74,10 +79,9 @@
     loop_var: solr_conf_set
   run_once: True
   when:
-    - zk_hosts | length>0
-    - configset_list | length>0
-  notify:
-    - 'restart solr'
+    - zk_hosts | length
+    - configset_list | length
+  changed_when: False
 
 - name: 'Force all notified handlers to run'
   meta: flush_handlers
