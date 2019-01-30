@@ -31,8 +31,7 @@
   command: >-
     {{ dest_solr_path }}/server/scripts/cloud-scripts/zkcli.sh
     -zkhost {{ zk_hosts[0] }}
-    -cmd get
-    /clusterprops.json
+    -cmd get /clusterprops.json
   args:
     removes: '{{ dest_solr_path }}/server/scripts/cloud-scripts/zkcli.sh'
   run_once: True
