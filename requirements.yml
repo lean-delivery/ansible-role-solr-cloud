@@ -1,0 +1,4 @@
+---
+- src: lean_delivery.java
+- src: lean_delivery.zookeeper
+- src: lean_delivery.solr_standalone

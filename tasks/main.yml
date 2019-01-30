@@ -1,0 +1,94 @@
+---
+- name: 'Set zookeeper hosts'
+  set_fact:
+    zk_hosts: '{{ zk_hosts }} + [ "{{ host }}:{{ zk_client_port }}" ]'
+  loop: '{{ groups[zk_inventory_group] | map("extract", hostvars, ["inventory_hostname"]) | select("defined") | list }}'
+  loop_control:
+    loop_var: host
+  run_once: True
+
+- name: 'group debug'
+  debug:
+    msg: '{{ groups[zk_inventory_group] }}'
+
+- name: 'group map debug'
+  debug:
+    msg: '{{ groups[zk_inventory_group] | map("extract", hostvars, ["inventory_hostname"]) | list }}'
+
+- name: 'group map debug w select'
+  debug:
+    msg: '{{ groups[zk_inventory_group] | map("extract", hostvars, ["inventory_hostname"]) | select("defined") | list }}'
+
+- name: 'zk_hosts'
+  debug:
+    var: zk_hosts
+
+- name: 'Replace zookeeper configuration'
+  lineinfile:
+    path: '{{ solr_insh_default }}'
+    regexp: '^ZK_HOST=(.*)'
+    line: 'ZK_HOST="{{ zk_hosts | join(",") }}"'
+  become: True
+  when:
+    - zk_hosts | length>0
+  notify:
+    - 'restart solr'
+
+- name: 'Replace zookeeper configuration'
+  lineinfile:
+    path: '{{ solr_insh_default }}'
+    regexp: '^SOLR_HOST=(.*)'
+    line: 'SOLR_HOST="{{ inventory_hostname }}"'
+  become: True
+  notify:
+    - 'restart solr'
+
+- name: 'Set zookeeper communication to https'
+  command: >-
+    {{ dest_solr_path }}/server/scripts/cloud-scripts/zkcli.sh
+    -zkhost {{ zk_hosts[0] }}
+    -cmd clusterprop
+    -name urlScheme
+    -val {{ zk_enable_ssl | ternary('https', 'http') }}
+  args:
+    removes: '{{ dest_solr_path }}/server/scripts/cloud-scripts/zkcli.sh'
+
+- name: 'Set configset list'
+  find:
+    paths: '{{ solr_configset_path }}'
+    file_type: directory
+  register: configset_output
+  run_once: True
+  become: True
+  when:
+    - auto_populate_configset_list
+    - zk_hosts | length>0
+
+- name: 'Populate configset list'
+  set_fact:
+    configset_list: "{{ configset_output.files | map(attribute='path') | list | \
+      map('replace', solr_configset_path + '/', '') | list }}"
+  when:
+    - auto_populate_configset_list
+    - zk_hosts | length>0
+
+- name: 'Debug configset_list'
+  debug:
+    var: configset_list
+
+- name: 'Solr Cloud upload config'
+  command: >-
+    {{ dest_solr_path }}/bin/solr zk -upconfig -n {{ solr_conf_set }}
+    -d '{{ solr_home }}/configsets/{{ solr_conf_set }}/conf'
+  loop: '{{ configset_list }}'
+  loop_control:
+    loop_var: solr_conf_set
+  run_once: True
+  when:
+    - zk_hosts | length>0
+    - configset_list | length>0
+  notify:
+    - 'restart solr'
+
+- name: 'Force all notified handlers to run'
+  meta: flush_handlers

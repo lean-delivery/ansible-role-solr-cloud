@@ -1,0 +1,21 @@
+---
+## Global application env settings
+solr_version: 7.1.0
+solr_insh_default: /etc/default/solr.in.sh
+
+solr_service_name: solr
+solr_base_path: /var/solr
+solr_home: '{{ solr_base_path }}/data'
+
+dest_main_path: '/opt'
+dest_solr_path: '{{ dest_main_path }}/solr-{{ solr_version }}'
+solr_configset_path: '{{ solr_home }}/configsets'
+solr_binary: '{{ dest_solr_path }}/bin/solr'
+
+# Solr Cloud
+zk_inventory_group: ''
+zk_client_port: 2181
+configset_list:
+  - default
+auto_populate_configset_list: True
+zk_enable_ssl: True

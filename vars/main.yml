@@ -1,0 +1,3 @@
+---
+# vars file for solr_cloud
+zk_hosts: []
