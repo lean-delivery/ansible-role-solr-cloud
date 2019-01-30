@@ -27,16 +27,6 @@
   notify:
     - 'restart solr'
 
-# - name: 'Get zookeeper communication property'
-#   command: >-
-#     {{ dest_solr_path }}/server/scripts/cloud-scripts/zkcli.sh
-#     -zkhost {{ zk_hosts[0] }}
-#     -cmd get /clusterprops.json
-#   args:
-#     removes: '{{ dest_solr_path }}/server/scripts/cloud-scripts/zkcli.sh'
-#   run_once: True
-#   register: zk_output
-
 - name: 'Set zookeeper communication to {{ zk_enable_ssl | ternary("https", "http") }}'
   command: >-
     {{ dest_solr_path }}/server/scripts/cloud-scripts/zkcli.sh
@@ -47,8 +37,7 @@
   args:
     removes: '{{ dest_solr_path }}/server/scripts/cloud-scripts/zkcli.sh'
   run_once: True
-  # when:
-  #   - (zk_output['stdout_lines'][0] | from_json)['urlScheme'] == '{{ zk_enable_ssl | ternary("https", "http") }}'
+  changed_when: False
 
 - name: 'Set configset list'
   find:
@@ -81,20 +70,6 @@
     - zk_hosts | length
     - configset_list | length
   changed_when: False
-
-- name: 'Get zookeeper props list - debug'
-  command: >-
-    {{ dest_solr_path }}/server/scripts/cloud-scripts/zkcli.sh
-    -zkhost {{ zk_hosts[0] }}
-    -cmd list
-  args:
-    removes: '{{ dest_solr_path }}/server/scripts/cloud-scripts/zkcli.sh'
-  run_once: True
-  register: zk_list_output
-
-- name: 'props debug'
-  debug:
-    var: zk_list_output
 
 - name: 'Force all notified handlers to run'
   meta: flush_handlers
