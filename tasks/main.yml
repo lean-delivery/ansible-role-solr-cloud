@@ -7,6 +7,20 @@
     loop_var: host
   run_once: True
 
+- name: 'Get zookeeper props list - debug'
+  command: >-
+    {{ dest_solr_path }}/server/scripts/cloud-scripts/zkcli.sh
+    -zkhost {{ zk_hosts[0] }}
+    -cmd list
+  args:
+    removes: '{{ dest_solr_path }}/server/scripts/cloud-scripts/zkcli.sh'
+  run_once: True
+  register: zk_list_output
+
+- name: 'props debug'
+  debug:
+    var: zk_list_output
+
 - name: 'pip'
   pip:
     name: 'pexpect'
@@ -56,10 +70,6 @@
     removes: '{{ dest_solr_path }}/server/scripts/cloud-scripts/zkcli.sh'
   run_once: True
   register: zk_output
-
-- name: 'Debug zk_output'
-  debug:
-    var: zk_output
 
 - name: 'Set zookeeper communication to {{ zk_enable_ssl | ternary("https", "http") }}'
   command: >-
