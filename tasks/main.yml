@@ -1,37 +1,12 @@
 ---
-- name: 'Debug1'
-  debug:
-    msg: '{{ hostvars[item]["ansible_default_ipv4"].address }}'
-  loop: '{{ groups[zk_inventory_group] }}'
-
-- name: 'Debug2'
-  debug:
-    msg: '{{ hostvars[item] }}'
-  loop: '{{ groups[zk_inventory_group] }}'
-
 - name: 'Set zookeeper hosts'
   set_fact:
     zk_hosts: '{{ zk_hosts }} + [ "{{ host }}:{{ zk_client_port }}" ]'
   loop: >
-    {{ groups[zk_inventory_group] | map("extract", hostvars, ["inventory_hostname"]) |
-    select("defined") | list }}
+    {{ groups[zk_inventory_group] | map("extract", hostvars, ["ansible_host"]) | list }}
   loop_control:
     loop_var: host
   run_once: True
-
-- name: 'group debug'
-  debug:
-    msg: '{{ groups[zk_inventory_group] }}'
-
-- name: 'group map debug'
-  debug:
-    msg: '{{ groups[zk_inventory_group] | map("extract", hostvars, ["inventory_hostname"]) | list }}'
-
-- name: 'group map debug w select'
-  debug:
-    msg: >
-      {{ groups[zk_inventory_group] | map("extract", hostvars, ["inventory_hostname"]) |
-      select("defined") | list }}
 
 - name: 'zk_hosts'
   debug:
