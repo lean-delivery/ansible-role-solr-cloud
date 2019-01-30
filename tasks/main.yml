@@ -2,7 +2,9 @@
 - name: 'Set zookeeper hosts'
   set_fact:
     zk_hosts: '{{ zk_hosts }} + [ "{{ host }}:{{ zk_client_port }}" ]'
-  loop: '{{ groups[zk_inventory_group] | map("extract", hostvars, ["inventory_hostname"]) | select("defined") | list }}'
+  loop: >
+    {{ groups[zk_inventory_group] | map("extract", hostvars, ["inventory_hostname"]) |
+    select("defined") | list }}
   loop_control:
     loop_var: host
   run_once: True
@@ -17,7 +19,9 @@
 
 - name: 'group map debug w select'
   debug:
-    msg: '{{ groups[zk_inventory_group] | map("extract", hostvars, ["inventory_hostname"]) | select("defined") | list }}'
+    msg: >
+      {{ groups[zk_inventory_group] | map("extract", hostvars, ["inventory_hostname"]) |
+      select("defined") | list }}
 
 - name: 'zk_hosts'
   debug:
