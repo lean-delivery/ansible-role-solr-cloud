@@ -25,7 +25,7 @@
 
 - name: 'telnet debug'
   debug:
-    var: telnet_out["stdout_lines"]
+    msg: '{{ telnet_out["stdout_lines"] }}'
 
 - name: 'Replace zookeeper configuration'
   lineinfile:
@@ -56,6 +56,10 @@
     removes: '{{ dest_solr_path }}/server/scripts/cloud-scripts/zkcli.sh'
   run_once: True
   register: zk_output
+
+- name: 'Debug zk_output'
+  debug:
+    var: zk_output
 
 - name: 'Set zookeeper communication to {{ zk_enable_ssl | ternary("https", "http") }}'
   command: >-
