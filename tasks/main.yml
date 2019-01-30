@@ -10,6 +10,8 @@
 - name: 'pip'
   pip:
     name: 'pexpect'
+  register: installed_repo
+  until: installed_repo is succeeded
   become: True
 
 - name: 'telnet'
