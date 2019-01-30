@@ -49,7 +49,7 @@
     removes: '{{ dest_solr_path }}/server/scripts/cloud-scripts/zkcli.sh'
   run_once: True
   when:
-    - (zk_output['stdout_lines'][0] | from_json)['urlScheme'] == zk_enable_ssl | ternary('https', 'http')
+    - (zk_output['stdout_lines'][0] | from_json)['urlScheme'] == '{{ zk_enable_ssl | ternary("https", "http") }}'
 
 - name: 'Set configset list'
   find:
