@@ -2,6 +2,7 @@ Solr configuration as a Cloud
 =========
 [![License](https://img.shields.io/badge/license-Apache-green.svg?style=flat)](https://raw.githubusercontent.com/lean-delivery/ansible-role-solr_cloud/master/LICENSE)
 [![Build Status](https://travis-ci.org/lean-delivery/ansible-role-solr_cloud.svg?branch=master)](https://travis-ci.org/lean-delivery/ansible-role-solr_cloud)
+[![Build Status](https://gitlab.com/lean-delivery/ansible-role-solr_cloud/badges/master/build.svg)](https://gitlab.com/lean-delivery/ansible-role-solr_cloud)
 [![Galaxy](https://img.shields.io/badge/galaxy-lean__delivery.solr__cloud-blue.svg)](https://galaxy.ansible.com/lean_delivery/solr_cloud)
 ![Ansible](https://img.shields.io/ansible/role/d/role_id.svg)
 ![Ansible](https://img.shields.io/badge/dynamic/json.svg?label=min_ansible_version&url=https%3A%2F%2Fgalaxy.ansible.com%2Fapi%2Fv1%2Froles%2Frole_id%2F&query=$.min_ansible_version)
@@ -15,6 +16,9 @@ Requirements
 ------------
 - Minimal Version of the ansible for installation: 2.5
   - **Java 8** [![Build Status](https://travis-ci.org/lean-delivery/ansible-role-java.svg?branch=master)](https://travis-ci.org/lean-delivery/ansible-role-java)
+  - **Zookeper** cluster installed [![Build Status](https://travis-ci.org/lean-delivery/ansible-role-zookeeper.svg?branch=master)](https://travis-ci.org/lean-delivery/ansible-role-zookeeper)
+  - ** Solr** standalone servers installed [![Build Status](https://travis-ci.org/lean-delivery/ansible-role-solr-standalone.svg?branch=master)](https://travis-ci.org/lean-delivery/ansible-role-solr-standalone)
+  - Zookeeper(z)-solr(s) instances formula should be s=2z+1 or s=z+1
   - **Supported OS**:
     - CentOS
       - 7
@@ -41,7 +45,10 @@ Role Variables
      default: `- default`
    - `auto_populate_configset_list` - get all configset directories automatically
      default: `True`
-   - `zk_enable_ssl` - set zookeepers to communicate with solr by ssl default: `True`
+   - `zk_enable_ssl` - set zookeepers to communicate with solr by ssl
+      default: `True`
+   - `zk_hosts_list` - list of zookeeper hosts
+      default: `{{ groups[zk_inventory_group] | map("extract", hostvars, ["ansible_default_ipv4","address"]) | list }}`
 
 Example Inventory
 ----------------

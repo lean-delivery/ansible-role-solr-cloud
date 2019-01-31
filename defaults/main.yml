@@ -19,3 +19,4 @@ configset_list:
   - default
 auto_populate_configset_list: True
 zk_enable_ssl: True
+zk_hosts_list: '{{ groups[zk_inventory_group] | map("extract", hostvars, ["ansible_default_ipv4","address"]) | list }}'
