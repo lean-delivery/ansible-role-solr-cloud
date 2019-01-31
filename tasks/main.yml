@@ -16,7 +16,7 @@
     - zk_regexp: '^ZK_HOST=(.*)'
       zk_line: 'ZK_HOST="{{ zk_hosts | join(",") }}"'
     - zk_regexp: '^SOLR_HOST=(.*)'
-      zk_line: 'SOLR_HOST="{{ inventory_hostname }}"'
+      zk_line: 'SOLR_HOST="{{ solr_host_naming }}"'
   loop_control:
     loop_var: zk_insh_config
   become: True

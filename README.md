@@ -49,6 +49,8 @@ Role Variables
       default: `True`
    - `zk_hosts_list` - list of zookeeper hosts
       default: `{{ groups[zk_inventory_group] | map("extract", hostvars, ["ansible_default_ipv4","address"]) | list }}`
+   - `solr_host_naming` - solr host name - to set FQDN name - solr will be reached for zookeeper by this name or ip
+      default: `{{ ansible_fqdn }}`
 
 Example Inventory
 ----------------
