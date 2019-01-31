@@ -1,0 +1,73 @@
+---
+- name: 'Set zookeeper hosts'
+  set_fact:
+    zk_hosts: '{{ zk_hosts }} + [ "{{ host }}:{{ zk_client_port }}" ]'
+  loop: '{{ zk_hosts_list }}'
+  loop_control:
+    loop_var: host
+  run_once: True
+
+- name: 'Replace zookeeper configuration'
+  lineinfile:
+    path: '{{ solr_insh_default }}'
+    regexp: '{{ zk_insh_config.zk_regexp }}'
+    line: '{{ zk_insh_config.zk_line }}'
+  loop:
+    - zk_regexp: '^ZK_HOST=(.*)'
+      zk_line: 'ZK_HOST="{{ zk_hosts | join(",") }}"'
+    - zk_regexp: '^SOLR_HOST=(.*)'
+      zk_line: 'SOLR_HOST="{{ solr_host_naming }}"'
+  loop_control:
+    loop_var: zk_insh_config
+  become: True
+  when:
+    - zk_hosts | length
+  notify:
+    - 'restart solr'
+
+- name: 'Set zookeeper communication to {{ zk_enable_ssl | ternary("https", "http") }}'
+  command: >-
+    {{ dest_solr_path }}/server/scripts/cloud-scripts/zkcli.sh
+    -zkhost {{ zk_hosts[0] }}
+    -cmd clusterprop
+    -name urlScheme
+    -val {{ zk_enable_ssl | ternary('https', 'http') }}
+  args:
+    removes: '{{ dest_solr_path }}/server/scripts/cloud-scripts/zkcli.sh'
+  run_once: True
+  changed_when: False
+
+- name: 'Set configset list'
+  find:
+    paths: '{{ solr_configset_path }}'
+    file_type: directory
+  register: configset_output
+  run_once: True
+  become: True
+  when:
+    - auto_populate_configset_list
+    - zk_hosts | length
+
+- name: 'Populate configset list'
+  set_fact:
+    configset_list: "{{ configset_output.files | map(attribute='path') | list | \
+      map('replace', solr_configset_path + '/', '') | list }}"
+  when:
+    - auto_populate_configset_list
+    - zk_hosts | length
+
+- name: 'Solr Cloud upload config'
+  command: >-
+    {{ dest_solr_path }}/bin/solr zk -upconfig -n {{ solr_conf_set }}
+    -d '{{ solr_home }}/configsets/{{ solr_conf_set }}/conf'
+  loop: '{{ configset_list }}'
+  loop_control:
+    loop_var: solr_conf_set
+  run_once: True
+  when:
+    - zk_hosts | length
+    - configset_list | length
+  changed_when: False
+
+- name: 'Force all notified handlers to run'
+  meta: flush_handlers
