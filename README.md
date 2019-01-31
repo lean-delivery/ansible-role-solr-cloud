@@ -17,7 +17,7 @@ Requirements
 - Minimal Version of the ansible for installation: 2.5
   - **Java 8** [![Build Status](https://travis-ci.org/lean-delivery/ansible-role-java.svg?branch=master)](https://travis-ci.org/lean-delivery/ansible-role-java)
   - **Zookeper** cluster installed [![Build Status](https://travis-ci.org/lean-delivery/ansible-role-zookeeper.svg?branch=master)](https://travis-ci.org/lean-delivery/ansible-role-zookeeper)
-  - ** Solr** standalone servers installed [![Build Status](https://travis-ci.org/lean-delivery/ansible-role-solr-standalone.svg?branch=master)](https://travis-ci.org/lean-delivery/ansible-role-solr-standalone)
+  - **Solr** standalone servers installed [![Build Status](https://travis-ci.org/lean-delivery/ansible-role-solr-standalone.svg?branch=master)](https://travis-ci.org/lean-delivery/ansible-role-solr-standalone)
   - Zookeeper(z)-solr(s) instances formula should be s=2z+1 or s=z+1
   - **Supported OS**:
     - CentOS
