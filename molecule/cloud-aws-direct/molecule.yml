@@ -25,6 +25,7 @@ platforms:
       - rhel_family
       - zookeeper
       - solr
+
   - name: test-aws-ubuntu16-solr-cloud
     image: ami-09677e0a6b14905b0
     instance_type: m5.large
@@ -40,6 +41,7 @@ platforms:
       - debian_family
       - zookeeper
       - solr
+
   - name: test-aws-ubuntu18-solr-cloud
     image: ami-012fd5eb46f56731f
     instance_type: m5.large
@@ -54,6 +56,38 @@ platforms:
     groups:
       - debian_family
       - zookeeper
+
+  - name: test-aws-Debian9-solr-cloud
+    image: ami-003f19e0e687de1cd
+    instance_type: m5.large
+    region: us-east-1
+    vpc_subnet_id: subnet-05a2ef2b767afec50
+    assign_public_ip: False
+    spot_price: 0.04
+    security_group_name:
+      - default
+    wait_timeout: 1800
+    ssh_user: admin
+    groups:
+      - debian_family
+      - zookeeper
+      - solr
+
+  - name: test-aws-Debian8-solr-cloud
+    image: ami-49e5cb5e
+    instance_type: m5.large
+    region: us-east-1
+    vpc_subnet_id: subnet-05a2ef2b767afec50
+    assign_public_ip: False
+    spot_price: 0.04
+    security_group_name:
+      - default
+    wait_timeout: 1800
+    ssh_user: admin
+    groups:
+      - debian_family
+      - zookeeper
+      - solr
 provisioner:
   name: ansible
   log: False

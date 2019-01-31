@@ -11,6 +11,14 @@ galaxy_info:
     - name: "EL"
       versions:
         - "7"
+    - name: "Ubuntu"
+      versions:
+        - "xenial"
+        - "bionic"
+    - name: "Debian"
+      versions:
+        - "jessie"
+        - "stretch"
 
   galaxy_tags:
     - "development"

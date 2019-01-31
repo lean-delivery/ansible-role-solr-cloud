@@ -23,6 +23,7 @@ Requirements
     - CentOS
       - 7
     - Ubuntu
+    - Debian
 
 Role Variables
 --------------
