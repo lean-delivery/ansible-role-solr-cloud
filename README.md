@@ -4,8 +4,8 @@ Solr configuration as a Cloud
 [![Build Status](https://travis-ci.org/lean-delivery/ansible-role-solr-cloud.svg?branch=master)](https://travis-ci.org/lean-delivery/ansible-role-solr-cloud)
 [![Build Status](https://gitlab.com/lean-delivery/ansible-role-solr-cloud/badges/master/build.svg)](https://gitlab.com/lean-delivery/ansible-role-solr-cloud)
 [![Galaxy](https://img.shields.io/badge/galaxy-lean__delivery.solr__cloud-blue.svg)](https://galaxy.ansible.com/lean_delivery/solr_cloud)
-![Ansible](https://img.shields.io/ansible/role/d/role_id.svg)
-![Ansible](https://img.shields.io/badge/dynamic/json.svg?label=min_ansible_version&url=https%3A%2F%2Fgalaxy.ansible.com%2Fapi%2Fv1%2Froles%2Frole_id%2F&query=$.min_ansible_version)
+![Ansible](https://img.shields.io/ansible/role/d/37354.svg)
+![Ansible](https://img.shields.io/badge/dynamic/json.svg?label=min_ansible_version&url=https%3A%2F%2Fgalaxy.ansible.com%2Fapi%2Fv1%2Froles%2F37354%2F&query=$.min_ansible_version)
 
 This role:
   - Configure Solr instances as cloud.
