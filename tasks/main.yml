@@ -1,5 +1,8 @@
 ---
-- name: 'Set zookeeper hosts'
+- name: Load a variables
+  include_vars: '{{ ansible_os_family }}.yml'
+
+- name: Set zookeeper hosts
   set_fact:
     zk_hosts: '{{ zk_hosts }} + [ "{{ host }}:{{ zk_client_port }}" ]'
   loop: '{{ zk_hosts_list }}'
@@ -7,7 +10,7 @@
     loop_var: host
   run_once: True
 
-- name: 'Replace zookeeper configuration'
+- name: Replace zookeeper configuration
   lineinfile:
     path: '{{ solr_insh_default }}'
     regexp: '{{ zk_insh_config.zk_regexp }}'
@@ -23,21 +26,21 @@
   when:
     - zk_hosts | length
   notify:
-    - 'restart solr'
+    - restart Solr Linux
 
-- name: 'Set zookeeper communication to {{ zk_enable_ssl | ternary("https", "http") }}'
+- name: 'Set zookeeper communication to {{ solr_ssl_enabled }}'
   command: >-
-    {{ dest_solr_path }}/server/scripts/cloud-scripts/zkcli.sh
+    {{ solr_dest_path }}/server/scripts/cloud-scripts/zkcli.sh
     -zkhost {{ zk_hosts[0] }}
     -cmd clusterprop
     -name urlScheme
-    -val {{ zk_enable_ssl | ternary('https', 'http') }}
+    -val {{ solr_ssl_enabled }}
   args:
-    removes: '{{ dest_solr_path }}/server/scripts/cloud-scripts/zkcli.sh'
+    removes: '{{ solr_dest_path }}/server/scripts/cloud-scripts/zkcli.sh'
   run_once: True
   changed_when: False
 
-- name: 'Set configset list'
+- name: Set configset list
   find:
     paths: '{{ solr_configset_path }}'
     file_type: directory
@@ -48,18 +51,18 @@
     - auto_populate_configset_list
     - zk_hosts | length
 
-- name: 'Populate configset list'
+- name: Populate configset list
   set_fact:
-    configset_list: "{{ configset_output.files | map(attribute='path') | list | \
-      map('replace', solr_configset_path + '/', '') | list }}"
+    configset_list: >-
+      {{ configset_output.files | map(attribute='path') | list }}
   when:
     - auto_populate_configset_list
     - zk_hosts | length
 
-- name: 'Solr Cloud upload config'
+- name: Solr Cloud upload config
   command: >-
-    {{ dest_solr_path }}/bin/solr zk -upconfig -n {{ solr_conf_set }}
-    -d '{{ solr_home }}/configsets/{{ solr_conf_set }}/conf'
+    {{ solr_dest_path }}/bin/solr zk -upconfig -n {{ solr_conf_set }}
+    -d '{{ solr_configset_path }}/{{ solr_conf_set | basename }}/conf'
   loop: '{{ configset_list }}'
   loop_control:
     loop_var: solr_conf_set
@@ -69,5 +72,5 @@
     - configset_list | length
   changed_when: False
 
-- name: 'Force all notified handlers to run'
+- name: Force all notified handlers to run
   meta: flush_handlers

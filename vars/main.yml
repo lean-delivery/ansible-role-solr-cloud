@@ -1,3 +1,4 @@
 ---
 # vars file for solr_cloud
 zk_hosts: []
+solr_ssl_enabled: '{{ zk_enable_ssl | ternary("https", "http") }}'
