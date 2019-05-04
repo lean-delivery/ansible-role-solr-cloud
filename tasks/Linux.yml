@@ -1,4 +1,8 @@
 ---
+- name: Debug
+  debug:
+    var: zk_hosts_list
+
 - name: Set zookeeper hosts
   set_fact:
     zk_hosts: '{{ zk_hosts }} + [ "{{ host }}:{{ zk_client_port }}" ]'
