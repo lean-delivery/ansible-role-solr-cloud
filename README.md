@@ -37,6 +37,10 @@ Role Variables
  - `solr_service_name` - solr service name
 
     default: `solr`
+  
+  - `solr_service_start` - to start solr service in the end of role/Playbook
+
+    default: `True`
 
  - `solr_base_path` - path to solr base
 

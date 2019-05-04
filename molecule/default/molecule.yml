@@ -41,6 +41,12 @@ platforms:
       - solr
 provisioner:
   name: ansible
+  inventory:
+    group_vars:
+      all:
+        solr_version: 8.0.0
+  playbooks:
+    prepare: ../resources/prepare.yml
   lint:
     name: ansible-lint
 scenario:

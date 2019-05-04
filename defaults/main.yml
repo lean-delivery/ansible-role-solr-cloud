@@ -4,6 +4,7 @@ solr_version: 8.0.0
 solr_insh_default: /etc/default/solr.in.sh
 
 solr_service_name: solr
+solr_service_start: True
 solr_base_path: /var/solr
 solr_home: '{{ solr_base_path }}/data'
 

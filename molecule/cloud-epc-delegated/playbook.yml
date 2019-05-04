@@ -1,34 +1,7 @@
 ---
-- name: Install Java
-  hosts: zookeeper
-  roles:
-    - role: lean_delivery.java
-      transport: web
-      transport_web: "{{ lookup('env','STORAGE_AWS') }}/oracle-java/jdk-8u211-linux-x64.tar.gz"
-      java_major_version: 8
-      java_minor_version: 211
-      java_package: jdk
-      java_tarball_install: True
-
-- name: Install and Configure Zookeeper Cluster
-  hosts: zookeeper
-  roles:
-    - role: lean_delivery.zookeeper
-      zk_force_myid: False
-      zk_version: 3.4.14
-      zk_checksum: b14f7a0fece8bd34c7fffa46039e563ac5367607c612517aa7bd37306afbd1cd
-
-- name: Install and Configure Solr Servers without ssl and authentication
+- name: Configure Solr Cloud
   hosts: solr
-  vars:
-    solr_version: 8.0.0
   roles:
-    - role: lean_delivery.solr_standalone
-      solr_change_default_password: False
-      solr_auth_configure: False
-      solr_ssl_configure: False
-      solr_ssl_check_peer_name: 'false'
-      solr_copy_default_configsets: True
     - role: ansible-role-solr-cloud
       zk_inventory_group: zookeeper
       auto_populate_configset_list: True

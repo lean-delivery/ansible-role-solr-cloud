@@ -4,3 +4,5 @@
     name: '{{ solr_service_name }}'
     state: restarted
   become: True
+  when:
+  - solr_service_start

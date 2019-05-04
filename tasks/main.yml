@@ -72,5 +72,11 @@
     - configset_list | length
   changed_when: False
 
-- name: Force all notified handlers to run
-  meta: flush_handlers
+- name: Start service
+  service:
+    name: '{{ solr_service_name }}'
+    state: started
+    enabled: True
+  become: True
+  when:
+    - solr_service_start

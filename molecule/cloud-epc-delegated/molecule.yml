@@ -27,6 +27,7 @@ platforms:
     groups:
       - rhel_family
       - zookeeper
+      - solr
   - name: test-epc-ubuntu1804-solr-cloud
     image: Ubuntu18.04_64-bit
     shape: small
@@ -39,9 +40,13 @@ platforms:
 provisioner:
   name: ansible
   log: True
+  inventory:
+    group_vars:
+      all:
+        solr_version: 8.0.0
   playbooks:
     create: ../resources/provisioning/EPC/create.yml
-    prepare: ../resources/provisioning/EPC/prepare.yml
+    prepare: ../resources/prepare.yml
     destroy: ../resources/provisioning/EPC/destroy.yml
   config_options:
     ssh_connection:
