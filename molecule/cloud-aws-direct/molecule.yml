@@ -55,7 +55,7 @@ platforms:
     ssh_user: ubuntu
     groups:
       - debian_family
-      - zookeeper
+      - solr
 
   - name: test-aws-Debian9-solr-cloud
     image: ami-003f19e0e687de1cd
@@ -72,17 +72,20 @@ platforms:
       - debian_family
       - zookeeper
       - solr
+
 provisioner:
   name: ansible
   log: False
+  inventory:
+    group_vars:
+      all:
+        solr_version: 8.0.0
   playbooks:
     create: ../resources/provisioning/AWS/create.yml
-    prepare: ../resources/provisioning/AWS/prepare.yml
+    prepare: ../resources/prepare.yml
     destroy: ../resources/provisioning/AWS/destroy.yml
   lint:
     name: ansible-lint
-  env:
-    ANSIBLE_LIBRARY: ${ANSIBLE_LIBRARY}
 scenario:
   name: cloud-aws-direct
 verifier:

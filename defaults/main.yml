@@ -1,16 +1,17 @@
 ---
 ## Global application env settings
-solr_version: 7.1.0
+solr_version: 8.0.0
 solr_insh_default: /etc/default/solr.in.sh
 
 solr_service_name: solr
+solr_service_start: True
 solr_base_path: /var/solr
 solr_home: '{{ solr_base_path }}/data'
 
-dest_main_path: '/opt'
-dest_solr_path: '{{ dest_main_path }}/solr-{{ solr_version }}'
-solr_configset_path: '{{ solr_home }}/configsets'
-solr_binary: '{{ dest_solr_path }}/bin/solr'
+solr_dest_main_path: '{{ default_solr_dest_main_path }}'
+solr_dest_path: '{{ solr_dest_main_path }}/solr-{{ solr_version }}'
+solr_configset_path: '{{ default_solr_configset_path }}'
+solr_binary: '{{ solr_dest_path }}/bin/solr'
 
 # Solr Cloud
 zk_inventory_group: ''
