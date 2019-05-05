@@ -41,13 +41,11 @@
 
 - name: Prepare Zookeeper
   hosts: zookeeper
-  gather_facts: True
   roles:
     - role: lean_delivery.zookeeper
 
 - name: Install and Configure Solr
   hosts: solr
-  gather_facts: True
   roles:
    - role: lean_delivery.solr_standalone
   vars:
