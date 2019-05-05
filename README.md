@@ -37,7 +37,7 @@ Role Variables
  - `solr_service_name` - solr service name
 
     default: `solr`
-  
+
   - `solr_service_start` - to start solr service in the end of role/Playbook
 
     default: `True`
@@ -120,7 +120,7 @@ Example Playbook
 - name: Install and Configure Solr Servers
   hosts: solr
   vars:
-    solr_version: 7.1.0
+    solr_version: 7.7.1
     solr_change_default_password: False
   roles:
     - role: lean_delivery.java

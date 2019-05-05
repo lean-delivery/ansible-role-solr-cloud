@@ -23,6 +23,7 @@ platforms:
     groups:
       - rhel_family
       - zookeeper
+      - solr
   - name: test-docker-ubuntu1804-solr-cloud
     image: leandelivery/docker-systemd:ubuntu-18.04
     privileged: True
