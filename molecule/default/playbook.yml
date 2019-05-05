@@ -1,4 +1,9 @@
 ---
+- name: Force gathering facts
+  hosts: all
+  gather_facts: True
+  roles: []
+
 - name: Configure Solr Cloud
   hosts: solr
   roles:
