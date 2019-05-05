@@ -4,7 +4,7 @@ galaxy_info:
   author: "Lean Delivery Team <team@lean-delivery.com>"
   description: "Solr Cloud configuration role for Ansible"
   company: "EPAM Systems"
-  issue_tracker_url: "https://github.com/lean-delivery/ansible-role-solr_cloud/issues"
+  issue_tracker_url: "https://github.com/lean-delivery/ansible-role-solr-cloud/issues"
   license: "Apache"
   min_ansible_version: "2.7"
   platforms:
