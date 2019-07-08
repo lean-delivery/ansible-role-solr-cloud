@@ -58,7 +58,7 @@ platforms:
       - debian_family
       - zookeeper
 
-  - name: test-aws-windows2016-sapjvm-8
+  - name: test-aws-windows2016-solr-cloud
     aws_image_id: ami-00a20f508263efd30
     platform: windows2016core
     aws_region: us-east-1
@@ -72,7 +72,7 @@ platforms:
       - windows
       - solr
 
-  - name: test-aws-windows2019-sapjvm-8
+  - name: test-aws-windows2019-solr-cloud
     aws_image_id: ami-0477b9335a5a75438
     platform: windows2019core
     aws_region: us-east-1
@@ -98,7 +98,7 @@ provisioner:
         ansible_winrm_transport: credssp
         ansible_winrm_server_cert_validation: ignore
   playbooks:
-    winrm:
+    WINRM:
       create: ../resources/provisioning/WINRM/create.yml
       prepare: ../resources/prepare.yml
       destroy: ../resources/provisioning/WINRM/destroy.yml
