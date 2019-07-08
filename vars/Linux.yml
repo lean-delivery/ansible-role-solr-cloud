@@ -1,3 +1,4 @@
 ---
+solr_in_default: /etc/default/solr.in.sh
 default_solr_dest_main_path: /opt
 default_solr_configset_path: '{{ solr_home }}/configsets'

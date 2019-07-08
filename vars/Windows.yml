@@ -1,0 +1,4 @@
+---
+solr_in_default: '{{ solr_dest_path }}\bin\solr.in.cmd'
+default_solr_dest_main_path: C:\Solr
+default_solr_configset_path: '{{ solr_dest_path }}\server\solr\configsets'

@@ -3,6 +3,11 @@
   systemd:
     name: '{{ solr_service_name }}'
     state: restarted
-  become: True
+  become: true
   when:
   - solr_service_start
+
+- name: restart Solr Windows
+  win_service:
+    name: '{{ solr_service_name }}'
+    state: restarted

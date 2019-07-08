@@ -12,9 +12,10 @@ lint:
 platforms:
   - name: test-aws-centos7-solr-cloud
     image: ami-9887c6e7
-    instance_type: m5.large
+    platform: centos7
+    instance_type: m5a.large
     region: us-east-1
-    vpc_subnet_id: subnet-05a2ef2b767afec50
+    vpc_subnet_id: subnet-0f2b9cd66faea38af
     assign_public_ip: false
     spot_price: 0.04
     security_group_name:
@@ -24,13 +25,13 @@ platforms:
     groups:
       - rhel_family
       - zookeeper
-      - solr
 
-  - name: test-aws-ubuntu16-solr-cloud
-    image: ami-09677e0a6b14905b0
-    instance_type: m5.large
+  - name: test-aws-ubuntu18-solr-cloud
+    image: ami-012fd5eb46f56731f
+    platform: ubuntu18
+    instance_type: m5a.large
     region: us-east-1
-    vpc_subnet_id: subnet-05a2ef2b767afec50
+    vpc_subnet_id: subnet-0f2b9cd66faea38af
     assign_public_ip: false
     security_group_name:
       - default
@@ -40,28 +41,13 @@ platforms:
     groups:
       - debian_family
       - zookeeper
-      - solr
-
-  - name: test-aws-ubuntu18-solr-cloud
-    image: ami-012fd5eb46f56731f
-    instance_type: m5.large
-    region: us-east-1
-    vpc_subnet_id: subnet-05a2ef2b767afec50
-    assign_public_ip: false
-    security_group_name:
-      - default
-    spot_price: 0.04
-    wait_timeout: 1800
-    ssh_user: ubuntu
-    groups:
-      - debian_family
-      - solr
 
   - name: test-aws-Debian9-solr-cloud
     image: ami-003f19e0e687de1cd
-    instance_type: m5.large
+    platform: debian9
+    instance_type: m5a.large
     region: us-east-1
-    vpc_subnet_id: subnet-05a2ef2b767afec50
+    vpc_subnet_id: subnet-0f2b9cd66faea38af
     assign_public_ip: false
     spot_price: 0.04
     security_group_name:
@@ -71,6 +57,33 @@ platforms:
     groups:
       - debian_family
       - zookeeper
+
+  - name: test-aws-windows2016-sapjvm-8
+    aws_image_id: ami-00a20f508263efd30
+    platform: windows2016core
+    aws_region: us-east-1
+    instance_type: m5a.large
+    assign_public_ip: false
+    spot_price: 0.14
+    aws_sec_group:
+      - default
+    vpc_subnet_id: subnet-0f2b9cd66faea38af
+    groups:
+      - windows
+      - solr
+
+  - name: test-aws-windows2019-sapjvm-8
+    aws_image_id: ami-0477b9335a5a75438
+    platform: windows2019core
+    aws_region: us-east-1
+    instance_type: m5a.large
+    assign_public_ip: false
+    spot_price: 0.14
+    aws_sec_group:
+      - default
+    vpc_subnet_id: subnet-0f2b9cd66faea38af
+    groups:
+      - windows
       - solr
 
 provisioner:
@@ -80,14 +93,22 @@ provisioner:
     group_vars:
       all:
         solr_version: 8.0.0
+      windows:
+        ansible_password: "{{ lookup('env', 'WINRM_ADMIN_PWD') | default('M0leCule123!', true) }}"
+        ansible_winrm_transport: credssp
+        ansible_winrm_server_cert_validation: ignore
   playbooks:
+    winrm:
+      create: ../resources/provisioning/WINRM/create.yml
+      prepare: ../resources/prepare.yml
+      destroy: ../resources/provisioning/WINRM/destroy.yml
     create: ../resources/provisioning/AWS/create.yml
     prepare: ../resources/prepare.yml
     destroy: ../resources/provisioning/AWS/destroy.yml
   lint:
     name: ansible-lint
 scenario:
-  name: cloud-aws-direct
+  name: cloud-aws-windows
 verifier:
   name: testinfra
   options:

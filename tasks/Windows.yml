@@ -8,7 +8,7 @@
   run_once: true
 
 - name: Replace zookeeper configuration
-  lineinfile:
+  win_lineinfile:
     path: '{{ solr_in }}'
     regexp: '{{ zk_insh_config.zk_regexp }}'
     line: '{{ zk_insh_config.zk_line }}'
@@ -19,31 +19,29 @@
       zk_line: 'SOLR_HOST="{{ solr_host_naming }}"'
   loop_control:
     loop_var: zk_insh_config
-  become: true
   when:
     - zk_hosts | length
   notify:
-    - restart Solr Linux
+    - restart Solr Windows
 
 - name: 'Set zookeeper communication to {{ solr_ssl_enabled }}'
-  command: >-
-    {{ solr_dest_path }}/server/scripts/cloud-scripts/zkcli.sh
+  win_command: >-
+    {{ solr_dest_path }}\server\scripts\cloud-scripts\zkcli.bat
     -zkhost {{ zk_hosts[0] }}
     -cmd clusterprop
     -name urlScheme
     -val {{ solr_ssl_enabled }}
   args:
-    removes: '{{ solr_dest_path }}/server/scripts/cloud-scripts/zkcli.sh'
+    removes: '{{ solr_dest_path }}\server\scripts\cloud-scripts\zkcli.bat'
   run_once: true
   changed_when: false
 
 - name: Set configset list
-  find:
+  win_find:
     paths: '{{ solr_configset_path }}'
     file_type: directory
   register: configset_output
   run_once: true
-  become: true
   when:
     - auto_populate_configset_list
     - zk_hosts | length
@@ -57,9 +55,9 @@
     - zk_hosts | length
 
 - name: Solr Cloud upload config
-  command: >-
-    {{ solr_dest_path }}/bin/solr zk -upconfig -n {{ solr_conf_set }}
-    -d '{{ solr_configset_path }}/{{ solr_conf_set | basename }}/conf'
+  win_command: >-
+    {{ solr_dest_path }}/bin/solr.cmd zk -upconfig -n {{ solr_conf_set }}
+    -d '{{ solr_configset_path }}\{{ solr_conf_set | win_basename }}\conf'
   loop: '{{ configset_list }}'
   loop_control:
     loop_var: solr_conf_set
@@ -70,10 +68,8 @@
   changed_when: false
 
 - name: Start service
-  service:
+  win_service:
     name: '{{ solr_service_name }}'
     state: started
-    enabled: true
-  become: true
   when:
     - solr_service_start
