@@ -3,8 +3,8 @@ dependency:
   name: galaxy
   options:
     role-file: requirements.yml
-#driver:
-#  name: ec2
+driver:
+  name: delegated
 lint:
   name: yamllint
   options:
