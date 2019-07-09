@@ -3,8 +3,8 @@ dependency:
   name: galaxy
   options:
     role-file: requirements.yml
-driver:
-  name: ec2
+#driver:
+#  name: ec2
 lint:
   name: yamllint
   options:
@@ -103,9 +103,10 @@ provisioner:
       create: ../resources/provisioning/WINRM/create.yml
       prepare: ../resources/prepare.yml
       destroy: ../resources/provisioning/WINRM/destroy.yml
-    create: ../resources/provisioning/AWS/create.yml
-    prepare: ../resources/prepare.yml
-    destroy: ../resources/provisioning/AWS/destroy.yml
+    ec2:
+      create: ../resources/provisioning/AWS/create.yml
+      prepare: ../resources/prepare.yml
+      destroy: ../resources/provisioning/AWS/destroy.yml
   lint:
     name: ansible-lint
 scenario:
