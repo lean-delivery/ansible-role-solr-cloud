@@ -94,7 +94,6 @@ provisioner:
       all:
         solr_version: 8.0.0
       windows:
-        connection: winrm
         ansible_connection: winrm
         ansible_password: "{{ lookup('env', 'WINRM_ADMIN_PWD') | default('M0leCule123!', true) }}"
         ansible_winrm_transport: credssp

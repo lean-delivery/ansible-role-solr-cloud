@@ -158,7 +158,7 @@
         dest: '{{ molecule_instance_config }}'
       when: instance_create.changed | bool
 
-    - name: Wait for SSH
+    - name: Wait for connection
       wait_for:
         port: '{{ item.port }}'
         host: '{{ item.address }}'

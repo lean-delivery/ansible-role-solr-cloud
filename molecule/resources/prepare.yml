@@ -34,8 +34,13 @@
       until: status is succeeded
       become: true
 
-- name: Prepare java
-  hosts: all
+- name: Prepare java win
+  hosts: windows
+  roles:
+    - role: lean_delivery.java
+
+- name: Prepare java linux
+  hosts: zookeeper
   roles:
     - role: lean_delivery.java
 
