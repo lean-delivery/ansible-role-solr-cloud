@@ -39,18 +39,18 @@
   roles:
     - role: lean_delivery.java
 
-- name: Prepare Zookeeper
-  hosts: zookeeper
-  roles:
-    - role: lean_delivery.zookeeper
+# - name: Prepare Zookeeper
+#   hosts: zookeeper
+#   roles:
+#     - role: lean_delivery.zookeeper
 
-- name: Install and Configure Solr
-  hosts: solr
-  roles:
-   - role: lean_delivery.solr_standalone
-  vars:
-    solr_change_default_password: false
-    solr_auth_configure: false
-    solr_use_java_version_8: false
-    solr_ssl_configure: false
-    solr_ssl_check_peer_name: 'false'
+# - name: Install and Configure Solr
+#   hosts: solr
+#   roles:
+#    - role: lean_delivery.solr_standalone
+#   vars:
+#     solr_change_default_password: false
+#     solr_auth_configure: false
+#     solr_use_java_version_8: false
+#     solr_ssl_configure: false
+#     solr_ssl_check_peer_name: 'false'
