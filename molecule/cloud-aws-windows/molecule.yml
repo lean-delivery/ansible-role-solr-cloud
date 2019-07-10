@@ -59,29 +59,29 @@ platforms:
       - zookeeper
 
   - name: test-aws-windows2016-solr-cloud
-    aws_image_id: ami-00a20f508263efd30
+    image: ami-00a20f508263efd30
     platform: windows2016core
     aws_region: us-east-1
     instance_type: m5a.large
-    assign_public_ip: false
+    assign_public_ip: true
     spot_price: 0.14
     aws_sec_group:
       - default
-    vpc_subnet_id: subnet-0f2b9cd66faea38af
+    vpc_subnet_id: subnet-01be2149
     groups:
       - windows
       - solr
 
   - name: test-aws-windows2019-solr-cloud
-    aws_image_id: ami-0477b9335a5a75438
+    image: ami-0477b9335a5a75438
     platform: windows2019core
     aws_region: us-east-1
     instance_type: m5a.large
-    assign_public_ip: false
+    assign_public_ip: true
     spot_price: 0.14
     aws_sec_group:
       - default
-    vpc_subnet_id: subnet-0f2b9cd66faea38af
+    vpc_subnet_id: subnet-01be2149
     groups:
       - windows
       - solr
@@ -99,12 +99,7 @@ provisioner:
         ansible_winrm_transport: credssp
         ansible_winrm_server_cert_validation: ignore
   playbooks:
-    delegated:
-      create: ../resources/provisioning/WINRM/create.yml
-      prepare: ../resources/prepare.yml
-      destroy: ../resources/provisioning/WINRM/destroy.yml
-    ec2:
-      create: ../resources/provisioning/AWS/create.yml
+      create: ../resources/common_create.yml
       prepare: ../resources/prepare.yml
       destroy: ../resources/provisioning/AWS/destroy.yml
   lint:
