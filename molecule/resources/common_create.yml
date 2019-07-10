@@ -138,7 +138,7 @@
           address: '{{ item.instances[0].private_ip }}'
           public_ip: '{{ item.instances[0].public_ip | default("") }}'
           user: '{{ item.instances[0].tags.ssh_user | default(ansible_user) }}'
-          port: '{{ (instance_create[0].item.platform in aws_platforms.linux) | ternary(ssh_port, winrm_port) }}'
+          port: '{{ (item.item.item.platform in aws_platforms.linux) | ternary(ssh_port, winrm_port) }}'
           identity_file: '{{ keypair_path }}'
           instance_ids: '{{ item.instance_ids }}'
       loop: '{{ instance_create.results }}'
