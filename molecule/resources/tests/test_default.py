@@ -3,8 +3,7 @@ import os
 import testinfra.utils.ansible_runner
 
 testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
-    os.environ['MOLECULE_INVENTORY_FILE']).get_hosts('all')
-
+    os.environ['MOLECULE_INVENTORY_FILE']).get_hosts('zookeeper')
 
 def test_hosts_file(host):
     f = host.file('/etc/hosts')
@@ -13,9 +12,8 @@ def test_hosts_file(host):
     assert f.user == 'root'
     assert f.group == 'root'
 
-
 def test_systemd(host):
-    s = host.service("solr")
+    s = host.service("zookeeper")
 
     assert s.is_running
     assert s.is_enabled
