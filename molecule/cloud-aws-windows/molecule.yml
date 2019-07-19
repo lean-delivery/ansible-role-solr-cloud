@@ -109,4 +109,3 @@ scenario:
 verifier:
   name: inspec
   directory: ../resources/tests/
-
