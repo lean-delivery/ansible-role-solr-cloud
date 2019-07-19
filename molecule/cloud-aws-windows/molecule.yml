@@ -109,3 +109,6 @@ scenario:
 verifier:
   name: inspec
   directory: ../resources/tests/
+  lint:
+    name: rubocop
+    enabled: false
