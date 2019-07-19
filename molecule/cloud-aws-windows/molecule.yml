@@ -107,9 +107,7 @@ provisioner:
 scenario:
   name: cloud-aws-windows
 verifier:
-  name: testinfra
-  options:
-    verbose: true
+  name: inspec
   directory: ../resources/tests/
   lint:
-    name: flake8
+    name: rubocop
