@@ -12,21 +12,21 @@ lint:
 platforms:
   - name: test-docker-centos7-solr-cloud-1
     image: leandelivery/docker-systemd:centos7
-    privileged: True
+    privileged: true
     groups:
       - rhel_family
       - zookeeper
       - solr
   - name: test-docker-centos7-solr-cloud-2
     image: leandelivery/docker-systemd:centos7
-    privileged: True
+    privileged: true
     groups:
       - rhel_family
       - zookeeper
       - solr
   - name: test-docker-ubuntu1804-solr-cloud
     image: leandelivery/docker-systemd:ubuntu-18.04
-    privileged: True
+    privileged: true
     security_opts:
       - seccomp=unconfined
     volumes:

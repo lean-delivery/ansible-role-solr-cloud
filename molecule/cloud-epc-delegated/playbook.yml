@@ -1,7 +1,7 @@
 ---
 - name: Force gathering facts
   hosts: all
-  gather_facts: True
+  gather_facts: true
   roles: []
 
 - name: Configure Solr Cloud
@@ -9,5 +9,5 @@
   roles:
     - role: ansible-role-solr-cloud
       zk_inventory_group: zookeeper
-      auto_populate_configset_list: True
-      zk_enable_ssl: False
+      auto_populate_configset_list: true
+      zk_enable_ssl: false

@@ -40,7 +40,7 @@ Role Variables
 
   - `solr_service_start` - to start solr service in the end of role/Playbook
 
-    default: `True`
+    default: `true`
 
  - `solr_base_path` - path to solr base
 
@@ -80,11 +80,11 @@ Role Variables
      default: `- default`
    - `auto_populate_configset_list` - get all configset directories automatically
 
-     default: `True`
+     default: `true`
 
    - `zk_enable_ssl` - set zookeepers to communicate with solr by ssl
 
-      default: `True`
+      default: `true`
 
    - `zk_hosts_list` - list of zookeeper hosts
 
@@ -121,7 +121,7 @@ Example Playbook
   hosts: solr
   vars:
     solr_version: 7.7.1
-    solr_change_default_password: False
+    solr_change_default_password: false
   roles:
     - role: lean_delivery.java
     - role: lean_delivery.solr_standalone
@@ -130,7 +130,7 @@ Example Playbook
       zk_inventory_group: zookeeper
       configset_list:
         - default
-      auto_populate_configset_list: False
+      auto_populate_configset_list: false
 ```
 
 ```yml
@@ -147,15 +147,15 @@ Example Playbook
   roles:
     - role: lean_delivery.java
     - role: lean_delivery.solr_standalone
-      solr_change_default_password: False
-      solr_auth_configure: False
-      solr_ssl_configure: False
+      solr_change_default_password: false
+      solr_auth_configure: false
+      solr_ssl_configure: false
     - role: lean_delivery.solr_cloud
       zk_inventory_group: zookeeper
       configset_list:
         - default
-      auto_populate_configset_list: False
-      zk_enable_ssl: False
+      auto_populate_configset_list: false
+      zk_enable_ssl: false
 ```
 
 License

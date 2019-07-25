@@ -5,7 +5,7 @@
   loop: '{{ zk_hosts_list }}'
   loop_control:
     loop_var: host
-  run_once: True
+  run_once: true
 
 - name: Replace zookeeper configuration
   lineinfile:
@@ -19,7 +19,7 @@
       zk_line: 'SOLR_HOST="{{ solr_host_naming }}"'
   loop_control:
     loop_var: zk_insh_config
-  become: True
+  become: true
   when:
     - zk_hosts | length
   notify:
@@ -34,16 +34,16 @@
     -val {{ solr_ssl_enabled }}
   args:
     removes: '{{ solr_dest_path }}/server/scripts/cloud-scripts/zkcli.sh'
-  run_once: True
-  changed_when: False
+  run_once: true
+  changed_when: false
 
 - name: Set configset list
   find:
     paths: '{{ solr_configset_path }}'
     file_type: directory
   register: configset_output
-  run_once: True
-  become: True
+  run_once: true
+  become: true
   when:
     - auto_populate_configset_list
     - zk_hosts | length
@@ -65,17 +65,17 @@
   loop: '{{ configset_list }}'
   loop_control:
     loop_var: solr_conf_set
-  run_once: True
+  run_once: true
   when:
     - zk_hosts | length
     - configset_list | length
-  changed_when: False
+  changed_when: false
 
 - name: Start service
   service:
     name: '{{ solr_service_name }}'
     state: started
-    enabled: True
-  become: True
+    enabled: true
+  become: true
   when:
     - solr_service_start
