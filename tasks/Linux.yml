@@ -57,6 +57,8 @@
     - zk_hosts | length
 
 - name: Solr Cloud upload config
+  environment:
+    SOLR_ENV: "{{ solr_insh_default }}"
   command: >-
     {{ solr_dest_path }}/bin/solr zk -upconfig -n {{ solr_conf_set }}
     -d '{{ solr_configset_path }}/{{ solr_conf_set | basename }}/conf'
