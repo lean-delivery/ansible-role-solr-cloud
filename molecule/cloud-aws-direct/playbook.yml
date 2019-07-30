@@ -1,27 +1,13 @@
 ---
-- name: Install Java
-  hosts: zookeeper
-  roles:
-    - role: lean_delivery.java
+- name: Force gathering facts
+  hosts: all
+  gather_facts: True
+  roles: []
 
-- name: Install and Configure Zookeeper Cluster
-  hosts: zookeeper
-  roles:
-    - role: lean_delivery.zookeeper
-      zk_force_myid: False
-
-- name: Install and Configure Solr Servers without ssl and authentication
+- name: Configure Solr Cloud
   hosts: solr
-  vars:
-    solr_version: 7.6.0
   roles:
-    - role: lean_delivery.solr_standalone
-      solr_change_default_password: False
-      solr_auth_configure: False
-      solr_ssl_configure: False
-      solr_ssl_check_peer_name: 'false'
     - role: ansible-role-solr-cloud
       zk_inventory_group: zookeeper
       auto_populate_configset_list: True
       zk_enable_ssl: False
-      solr_home: '{{ dest_solr_path }}/server/solr'

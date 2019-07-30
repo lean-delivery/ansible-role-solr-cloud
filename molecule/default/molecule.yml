@@ -23,6 +23,7 @@ platforms:
     groups:
       - rhel_family
       - zookeeper
+      - solr
   - name: test-docker-ubuntu1804-solr-cloud
     image: leandelivery/docker-systemd:ubuntu-18.04
     privileged: True
@@ -41,6 +42,12 @@ platforms:
       - solr
 provisioner:
   name: ansible
+  inventory:
+    group_vars:
+      all:
+        solr_version: 8.0.0
+  playbooks:
+    prepare: ../resources/prepare.yml
   lint:
     name: ansible-lint
 scenario:
