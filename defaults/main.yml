@@ -4,7 +4,7 @@ solr_version: 8.0.0
 solr_insh_default: /etc/default/solr.in.sh
 
 solr_service_name: solr
-solr_service_start: True
+solr_service_start: true
 solr_base_path: /var/solr
 solr_home: '{{ solr_base_path }}/data'
 
@@ -18,7 +18,7 @@ zk_inventory_group: ''
 zk_client_port: 2181
 configset_list:
   - default
-auto_populate_configset_list: True
-zk_enable_ssl: True
+auto_populate_configset_list: true
+zk_enable_ssl: true
 zk_hosts_list: '{{ groups[zk_inventory_group] | map("extract", hostvars, ["ansible_default_ipv4","address"]) | list }}'
 solr_host_naming: '{{ ansible_fqdn }}'

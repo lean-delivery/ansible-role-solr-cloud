@@ -39,7 +39,7 @@ platforms:
       - solr
 provisioner:
   name: ansible
-  log: True
+  log: true
   inventory:
     group_vars:
       all:
