@@ -56,6 +56,17 @@
     - auto_populate_configset_list
     - zk_hosts | length
 
+- name: debug configset_output
+  debug:
+    var: configset_output
+
+- name: Debug configset_list
+  debug:
+    msg: '{{ solr_conf_set }}'
+  loop: '{{ configset_list }}'
+  loop_control:
+    loop_var: solr_conf_set
+
 - name: Solr Cloud upload config
   command: >-
     {{ solr_dest_path }}/bin/solr zk -upconfig -n {{ solr_conf_set }}
