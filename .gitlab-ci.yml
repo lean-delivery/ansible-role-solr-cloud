@@ -1,5 +1,9 @@
 ---
 # Run all tests
+default:
+  image:
+    name: leandelivery/docker-ansible-ci:ansible-2.7
+
 stages:
   - lint
   - deployment test
@@ -41,7 +45,7 @@ AWS solr-cloud:
   tags:
     - aws
 
-EPC solr-cloud:
+.EPC solr-cloud:
   variables:
     EPC_REGION: EPAM-BY2
   stage: deployment test

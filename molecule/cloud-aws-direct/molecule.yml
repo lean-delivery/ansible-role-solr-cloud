@@ -12,9 +12,10 @@ lint:
 platforms:
   - name: test-aws-centos7-solr-cloud
     image: ami-9887c6e7
+    platform: centos7
     instance_type: m5.large
     region: us-east-1
-    vpc_subnet_id: subnet-05a2ef2b767afec50
+    vpc_subnet_id: subnet-0f2b9cd66faea38af
     assign_public_ip: false
     spot_price: 0.04
     security_group_name:
@@ -28,9 +29,10 @@ platforms:
 
   - name: test-aws-ubuntu16-solr-cloud
     image: ami-09677e0a6b14905b0
+    platform: ubuntu16
     instance_type: m5.large
     region: us-east-1
-    vpc_subnet_id: subnet-05a2ef2b767afec50
+    vpc_subnet_id: subnet-0f2b9cd66faea38af
     assign_public_ip: false
     security_group_name:
       - default
@@ -44,9 +46,10 @@ platforms:
 
   - name: test-aws-ubuntu18-solr-cloud
     image: ami-012fd5eb46f56731f
+    platform: ubuntu18
     instance_type: m5.large
     region: us-east-1
-    vpc_subnet_id: subnet-05a2ef2b767afec50
+    vpc_subnet_id: subnet-0f2b9cd66faea38af
     assign_public_ip: false
     security_group_name:
       - default
@@ -59,9 +62,10 @@ platforms:
 
   - name: test-aws-Debian9-solr-cloud
     image: ami-003f19e0e687de1cd
+    platform: debian9
     instance_type: m5.large
     region: us-east-1
-    vpc_subnet_id: subnet-05a2ef2b767afec50
+    vpc_subnet_id: subnet-0f2b9cd66faea38af
     assign_public_ip: false
     spot_price: 0.04
     security_group_name:
@@ -76,22 +80,28 @@ platforms:
 provisioner:
   name: ansible
   log: false
+  config_options:
+    defaults:
+      callback_whitelist: profile_tasks,timer
   inventory:
     group_vars:
       all:
         solr_version: 8.0.0
+      windows:
+        ansible_connection: winrm
+        ansible_password: "{{ lookup('env', 'WINRM_ADMIN_PWD') | default('M0leCule123!', true) }}"
+        ansible_winrm_transport: credssp
+        ansible_winrm_server_cert_validation: ignore
   playbooks:
     create: ../resources/provisioning/AWS/create.yml
     prepare: ../resources/prepare.yml
     destroy: ../resources/provisioning/AWS/destroy.yml
+    verify: ../resources/tests/verify.yml
   lint:
     name: ansible-lint
 scenario:
   name: cloud-aws-direct
 verifier:
-  name: testinfra
-  options:
-    verbose: true
-  directory: ../resources/tests/
+  name: ansible
   lint:
     name: flake8
