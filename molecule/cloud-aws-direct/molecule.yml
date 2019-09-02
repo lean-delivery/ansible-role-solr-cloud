@@ -44,21 +44,21 @@ platforms:
       - zookeeper
       - solr
 
-  - name: test-aws-ubuntu18-solr-cloud
-    image: ami-012fd5eb46f56731f
-    platform: ubuntu18
-    instance_type: m5.large
-    region: us-east-1
-    vpc_subnet_id: subnet-0f2b9cd66faea38af
-    assign_public_ip: false
-    security_group_name:
-      - default
-    spot_price: 0.04
-    wait_timeout: 1800
-    ssh_user: ubuntu
-    groups:
-      - debian_family
-      - solr
+  # - name: test-aws-ubuntu18-solr-cloud
+  #   image: ami-012fd5eb46f56731f
+  #   platform: ubuntu18
+  #   instance_type: m5.large
+  #   region: us-east-1
+  #   vpc_subnet_id: subnet-0f2b9cd66faea38af
+  #   assign_public_ip: false
+  #   security_group_name:
+  #     - default
+  #   spot_price: 0.04
+  #   wait_timeout: 1800
+  #   ssh_user: ubuntu
+  #   groups:
+  #     - debian_family
+  #     - solr
 
   - name: test-aws-Debian9-solr-cloud
     image: ami-003f19e0e687de1cd
