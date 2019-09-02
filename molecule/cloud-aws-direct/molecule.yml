@@ -104,4 +104,4 @@ scenario:
 verifier:
   name: ansible
   lint:
-    name: flake8
+    name: ansible-lint
